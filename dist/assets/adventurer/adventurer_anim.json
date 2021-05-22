@@ -123,6 +123,22 @@
           "frame": "adventurer-smrslt-03"
         }
       ]
+    },
+    {
+      "key": "slide",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 8,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-slide-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-slide-01"
+        }
+      ]
     }
   ]
 }

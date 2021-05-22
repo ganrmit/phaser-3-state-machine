@@ -1,6 +1,6 @@
 # Phaser 3 Arcade State Machine
 - [Live version](https://ganrmit.github.io/phaser-3-state-machine/dist/index.html)
-This is my attempt at making a player state movement state machine in Phaser 3.
+This is my attempt at making a player movement state machine in Phaser 3.
 
 ## Available Commands
 

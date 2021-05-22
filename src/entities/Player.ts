@@ -19,16 +19,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   update(time: number, delta: number) {
-    if (this.cursors.left.isDown) {
-      this.setFlipX(true)
-    } else if (this.cursors.right.isDown) {
-      this.setFlipX(false)
-    } else {
-      this.setVelocityX(0)
-    }
-
     switch (this.state) {
       case 'idle':
+        this.controllableStates()
         if (Phaser.Input.Keyboard.JustDown(this.cursors.up) && this.body.touching.down) {
           this.setVelocityY(-250)
           this.enterState('jump')
@@ -39,7 +32,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         }
         break
       case 'run':
-        if (Phaser.Input.Keyboard.JustDown(this.cursors.up) && this.body.touching.down) {
+        this.controllableStates()
+        if (this.cursors.down.isDown) {
+          this.enterState('slide')
+        } else if (Phaser.Input.Keyboard.JustDown(this.cursors.up) && this.body.touching.down) {
           this.setVelocityY(-250)
           this.enterState('jump')
         } else if (this.cursors.left.isDown) {
@@ -51,11 +47,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         }
         break
       case 'crouch':
+        this.controllableStates()
         if (!this.cursors.down.isDown) {
           this.enterState('idle')
         }
         break
       case 'jump':
+        this.controllableStates()
         if (this.cursors.left.isDown) {
           this.setVelocityX(-160)
         } else if (this.cursors.right.isDown) {
@@ -69,6 +67,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         }
         break
       case 'doublejump':
+        this.controllableStates()
         if (this.cursors.left.isDown) {
           this.setVelocityX(-160)
         } else if (this.cursors.right.isDown) {
@@ -78,6 +77,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           this.enterState('idle')
         }
         break
+      case 'slide':
+        if (!this.cursors.down.isDown) {
+          this.enterState('idle')
+        }
+        break
+    }
+  }
+
+  controllableStates() {
+    if (this.cursors.left.isDown) {
+      this.setFlipX(true)
+    } else if (this.cursors.right.isDown) {
+      this.setFlipX(false)
+    } else {
+      this.setVelocityX(0)
     }
   }
 
@@ -98,6 +112,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         break
       case 'doublejump':
         this.anims.play('smrslt')
+        break
+      case 'slide':
+        this.anims.play('slide')
         break
     }
   }

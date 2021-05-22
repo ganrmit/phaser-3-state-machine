@@ -1,0 +1,128 @@
+{
+  "anims": [
+    {
+      "key": "idle",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 4,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-idle-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-idle-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-idle-02"
+        }
+      ]
+    },
+    {
+      "key": "run",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 4,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-03"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-04"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-05"
+        }
+      ]
+    },
+    {
+      "key": "crouch",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 4,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-crouch-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-crouch-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-crouch-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-crouch-03"
+        }
+      ]
+    },
+    {
+      "key": "jump",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 12,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-jump-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-jump-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-jump-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-jump-03"
+        }
+      ]
+    },
+    {
+      "key": "smrslt",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 8,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-smrslt-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-smrslt-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-smrslt-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-smrslt-03"
+        }
+      ]
+    }
+  ]
+}

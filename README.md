@@ -14,3 +14,4 @@ This is my attempt at making a player movement state machine in Phaser 3.
 ## Credits
 - [Phaser 3 Typescript Starter](https://github.com/geocine/phaser3-rollup-typescript)
 - [Animated Pixel Adventurer](https://rvros.itch.io/animated-pixel-hero)
+- [Game Programming Patterns - State](https://gameprogrammingpatterns.com/state.html)

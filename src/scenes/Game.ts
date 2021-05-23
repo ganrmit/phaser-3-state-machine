@@ -15,7 +15,7 @@ export default class StateDemo extends Phaser.Scene {
 
   create() {
     let platforms = this.physics.add.staticGroup()
-    platforms.add(this.add.rectangle(150, 200, 1000, 20, 0xff0000))
+    platforms.add(this.add.rectangle(150, 200, 300, 20, 0xff0000))
     platforms.add(this.add.rectangle(0, 100, 20, 200, 0xff0000))
 
     this.player = new Player(this, 100, 100)

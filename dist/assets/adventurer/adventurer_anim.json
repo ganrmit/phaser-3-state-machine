@@ -139,6 +139,54 @@
           "frame": "adventurer-slide-01"
         }
       ]
+    },
+    {
+      "key": "stand",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 12,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-stand-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-stand-01"
+        }
+      ]
+    },
+    {
+      "key": "wall-slide",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 12,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-wall-slide-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-wall-slide-01"
+        }
+      ]
+    },
+    {
+      "key": "fall",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 12,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-fall-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-fall-01"
+        }
+      ]
     }
   ]
 }

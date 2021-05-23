@@ -28,7 +28,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     // Phaser has its own this.state so have to make a dumb name to keep TypeScript happy
     this.pState = new IdleState(this, this.controls)
 
-    ;(window as any).player = this
+    // @ts-ignore dev variable
+    window.player = this
   }
 
   update(time: number, delta: number) {
@@ -46,6 +47,7 @@ abstract class State {
 
   // Is this how to make Typescript accept class implementations as a param?
   transition(klass: new (player: Player, controls: Controls) => State): State {
+    console.log(klass.name)
     return new klass(this.player, this.controls)
   }
 
@@ -76,9 +78,9 @@ class IdleState extends State {
       // but it will allow me to do exit transitions easily... not sure if worth.
       return this.transition(JumpState)
     } else if (this.controls.stickX !== 0) {
-      return new RunState(this.player, this.controls)
+      return this.transition(RunState)
     } else if (this.controls.down.isDown) {
-      return new CrouchState(this.player, this.controls)
+      return this.transition(CrouchState)
     }
   }
 }
@@ -93,11 +95,11 @@ class RunState extends State {
     this.lookDirection()
     this.moveX()
     if (this.controls.down.isDown) {
-      return new SlideState(this.player, this.controls)
+      return this.transition(SlideState)
     } else if (Phaser.Input.Keyboard.JustDown(this.controls.jump) && this.player.body.touching.down) {
-      return new JumpState(this.player, this.controls)
+      return this.transition(JumpState)
     } else if (this.controls.stickX === 0 ) {
-      return new IdleState(this.player, this.controls)
+      return this.transition(IdleState)
     }
   }
 }
@@ -112,7 +114,7 @@ class CrouchState extends State {
     this.lookDirection()
     this.moveX()
     if (!this.controls.down.isDown) {
-      return new IdleState(this.player, this.controls)
+      return this.transition(IdleState)
     } else if (this.controls.stickX !== 0) {
       return this.transition(SlideState)
     }
@@ -130,9 +132,11 @@ class JumpState extends State {
     this.lookDirection()
     this.moveX()
     if (Phaser.Input.Keyboard.JustDown(this.controls.jump)) {
-      return new DoublejumpState(this.player, this.controls)
+      return this.transition(DoublejumpState)
     } else if (this.player.body.touching.down) {
-      return new IdleState(this.player, this.controls)
+      return this.transition(IdleState)
+    } else if (this.player.body.touching.left || this.player.body.touching.right) {
+      return this.transition(WallSlideState)
     }
   }
 }
@@ -148,7 +152,9 @@ class DoublejumpState extends State {
     this.lookDirection()
     this.moveX()
     if (this.player.body.touching.down) {
-      return new IdleState(this.player, this.controls)
+      return this.transition(IdleState)
+    } else if (this.player.body.touching.left || this.player.body.touching.right) {
+      return this.transition(WallSlideState)
     }
   }
 }
@@ -160,9 +166,43 @@ class SlideState extends State {
   }
 
   update() {
-    this.player.setVelocityX(this.player.body.velocity.x * 0.97)
+    this.player.body.velocity.x *= 0.97
+    if (Math.abs(this.player.body.velocity.x) < 10) {
+      this.player.body.velocity.x = 0
+    }
     if (!this.controls.down.isDown) {
-      return new IdleState(this.player, this.controls)
+      return this.transition(StandState)
+    }
+  }
+}
+
+class StandState extends State {
+  constructor(player: Player, controls: Controls) {
+    super(player, controls)
+    player.anims.play('stand')
+  }
+
+  update() {
+    if (!this.player.anims.isPlaying) {
+      return this.transition(IdleState)
+    }
+  }
+}
+
+class WallSlideState extends State {
+  constructor(player: Player, controls: Controls) {
+    super(player, controls)
+    player.anims.play('wall-slide')
+    player.setGravityY(-100)
+    // Next time on Dragon Ball Z! I will make a wallside variable up here.
+    // Then the player can only double jump away if they press jump AND the opposite direction.
+    // Then I'll need a timer or something on the double jump state to make sure it can't transition back in... or I could just make double jump never transition to this?
+  }
+
+  update() {
+    if (this.player.body.touching.down) {
+      this.player.setGravityY(300)
+      return this.transition(IdleState)
     }
   }
 }

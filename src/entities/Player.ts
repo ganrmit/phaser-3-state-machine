@@ -1,13 +1,15 @@
 // Attempt at making a class based player state machine with support for state's having their
 // own state (... terminology is failing me here but for instance the WallClimb state can
 // have its own counters to control animation etc)
-//
 // Check the bottom of this file for the actual state classes
+
+import Controls from "../util/Controls"
+
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   readonly baseRunSpeed = 160
   readonly baseJumpHeight = 250
 
-  controls: Phaser.Types.Input.Keyboard.CursorKeys
+  controls: Controls
   pState: State
 
   static preload(scene: Phaser.Scene) {
@@ -22,7 +24,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.setCollideWorldBounds()
     this.setSize(12, 36)
     this.setGravityY(300)
-    this.controls = scene.input.keyboard.createCursorKeys()
+    this.controls = new Controls(scene)
     // Phaser has its own this.state so have to make a dumb name to keep TypeScript happy
     this.pState = new IdleState(this, this.controls)
   }
@@ -36,13 +38,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 }
 
 abstract class State {
-  constructor(protected player: Player, protected controls: Phaser.Types.Input.Keyboard.CursorKeys) {}
+  constructor(protected player: Player, protected controls: Controls) {}
 
   abstract update(): State | void
 
-  // How do I make Typescript accept class implementations as a param?
-  to(state: any): State {
-    return new state(this.player, this.controls)
+  // Is this how to make Typescript accept class implementations as a param?
+  to(klass: new (player: Player, controls: Controls) => State): State {
+    return new klass(this.player, this.controls)
   }
 
   lookDirection() {
@@ -57,18 +59,18 @@ abstract class State {
 }
 
 class IdleState extends State {
-  constructor(player: Player, controls: Phaser.Types.Input.Keyboard.CursorKeys) {
+  constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.anims.play('idle')
   }
 
   update() {
     this.lookDirection()
-    if (Phaser.Input.Keyboard.JustDown(this.controls.up) && this.player.body.touching.down) {
+    if (Phaser.Input.Keyboard.JustDown(this.controls.jump) && this.player.body.touching.down) {
       // I'm not sure this indirect construction is actually better
-      // but it will allow me to do exit transitions easily... not sure.
+      // but it will allow me to do exit transitions easily... not sure if worth.
       return this.to(JumpState)
-    } else if (this.controls.left.isDown || this.controls.right.isDown) {
+    } else if (this.controls.stickX !== 0) {
       return new RunState(this.player, this.controls)
     } else if (this.controls.down.isDown) {
       return new CrouchState(this.player, this.controls)
@@ -77,7 +79,7 @@ class IdleState extends State {
 }
 
 class RunState extends State {
-  constructor(player: Player, controls: Phaser.Types.Input.Keyboard.CursorKeys) {
+  constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.anims.play('run')
   }
@@ -86,12 +88,10 @@ class RunState extends State {
     this.lookDirection()
     if (this.controls.down.isDown) {
       return new SlideState(this.player, this.controls)
-    } else if (Phaser.Input.Keyboard.JustDown(this.controls.up) && this.player.body.touching.down) {
+    } else if (Phaser.Input.Keyboard.JustDown(this.controls.jump) && this.player.body.touching.down) {
       return new JumpState(this.player, this.controls)
-    } else if (this.controls.left.isDown) {
-      this.player.setVelocityX(-this.player.baseRunSpeed)
-    } else if (this.controls.right.isDown) {
-      this.player.setVelocityX(this.player.baseRunSpeed)
+    } else if (this.controls.stickX !== 0) {
+      this.player.setVelocityX(this.player.baseRunSpeed * this.controls.stickX)
     } else {
       return new IdleState(this.player, this.controls)
     }
@@ -99,7 +99,7 @@ class RunState extends State {
 }
 
 class CrouchState extends State {
-  constructor(player: Player, controls: Phaser.Types.Input.Keyboard.CursorKeys) {
+  constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.anims.play('crouch')
   }
@@ -108,18 +108,15 @@ class CrouchState extends State {
     this.lookDirection()
     if (!this.controls.down.isDown) {
       return new IdleState(this.player, this.controls)
-    } else if (this.controls.left.isDown) {
-      this.player.setVelocityX(-this.player.baseRunSpeed)
-      return this.to(SlideState)
-    } else if (this.controls.right.isDown) {
-      this.player.setVelocityX(this.player.baseRunSpeed)
+    } else if (this.controls.stickX !== 0) {
+      this.player.setVelocityX(this.player.baseRunSpeed * this.controls.stickX)
       return this.to(SlideState)
     }
   }
 }
 
 class JumpState extends State {
-  constructor(player: Player, controls: Phaser.Types.Input.Keyboard.CursorKeys) {
+  constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.setVelocityY(-this.player.baseJumpHeight)
     player.anims.play('jump')
@@ -127,12 +124,10 @@ class JumpState extends State {
 
   update() {
     this.lookDirection()
-    if (this.controls.left.isDown) {
-      this.player.setVelocityX(-this.player.baseRunSpeed)
-    } else if (this.controls.right.isDown) {
-      this.player.setVelocityX(this.player.baseRunSpeed)
+    if (this.controls.stickX !== 0) {
+      this.player.setVelocityX(this.player.baseRunSpeed * this.controls.stickX)
     }
-    if (Phaser.Input.Keyboard.JustDown(this.controls.up)) {
+    if (Phaser.Input.Keyboard.JustDown(this.controls.jump)) {
       return new DoublejumpState(this.player, this.controls)
     } else if (this.player.body.touching.down) {
       return new IdleState(this.player, this.controls)
@@ -141,7 +136,7 @@ class JumpState extends State {
 }
 
 class DoublejumpState extends State {
-  constructor(player: Player, controls: Phaser.Types.Input.Keyboard.CursorKeys) {
+  constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.setVelocityY(-this.player.baseJumpHeight)
     player.anims.play('smrslt')
@@ -149,10 +144,8 @@ class DoublejumpState extends State {
 
   update() {
     this.lookDirection()
-    if (this.controls.left.isDown) {
-      this.player.setVelocityX(-this.player.baseRunSpeed)
-    } else if (this.controls.right.isDown) {
-      this.player.setVelocityX(this.player.baseRunSpeed)
+    if (this.controls.stickX !== 0) {
+      this.player.setVelocityX(this.player.baseRunSpeed * this.controls.stickX)
     }
     if (this.player.body.touching.down) {
       return new IdleState(this.player, this.controls)
@@ -161,7 +154,7 @@ class DoublejumpState extends State {
 }
 
 class SlideState extends State {
-  constructor(player: Player, controls: Phaser.Types.Input.Keyboard.CursorKeys) {
+  constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.anims.play('slide')
   }

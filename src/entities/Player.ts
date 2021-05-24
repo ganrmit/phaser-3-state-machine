@@ -3,6 +3,7 @@
 // have its own counters to control animation etc)
 // Check the bottom of this file for the actual state classes
 
+import StateDemo from '../scenes/Game'
 import Controls from '../util/Controls'
 import StopWatch from '../util/StopWatch'
 
@@ -38,6 +39,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.lastState = this.currentState
       this.currentState = newState
     }
+  }
+
+  // Ugly hack until I figure out how I want to handle what walls are slideable
+  againstSlide(): boolean {
+    return (this.body as Phaser.Physics.Arcade.Body).onWall() && (this.x < 30 || this.x > 270)
   }
 }
 
@@ -143,7 +149,7 @@ class JumpState extends State {
       return this.transition(DoublejumpState)
     } else if (this.player.body.touching.down) {
       return this.transition(IdleState)
-    } else if ((this.player.body as Phaser.Physics.Arcade.Body).onWall()) {
+    } else if (this.player.againstSlide()) {
       return this.transition(WallSlideState)
     }
   }
@@ -161,7 +167,7 @@ class DoublejumpState extends State {
     this.moveX()
     if (this.player.body.touching.down) {
       return this.transition(IdleState)
-    } else if ((this.player.body as Phaser.Physics.Arcade.Body).onWall()) {
+    } else if (this.player.againstSlide()) {
       return this.transition(WallSlideState)
     }
   }

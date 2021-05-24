@@ -23,8 +23,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this)
     scene.physics.add.existing(this)
     this.setCollideWorldBounds()
-    this.setSize(12, 36)
+    this.setSize(12, 30)
     this.setGravityY(300)
+    this.setDepth(100)
     this.controls = new Controls(scene)
     // Phaser has its own this.state so have to make a dumb name to keep TypeScript happy
     this.pState = new IdleState(this, this.controls)
@@ -46,7 +47,7 @@ abstract class State {
 
   abstract update(): State | void
 
-  // Is this how to make Typescript accept class implementations as a param?
+  // TODO: Is this how to make Typescript accept abstract classes as a param?
   transition(klass: new (player: Player, controls: Controls) => State): State {
     console.log(klass.name)
     return new klass(this.player, this.controls)
@@ -201,6 +202,8 @@ class WallSlideState extends State {
     // Next time on Dragon Ball Z! I will make a wallside variable up here.
     // Then the player can only double jump away if they press jump AND the opposite direction.
     // Then I'll need a timer or something on the double jump state to make sure it can't transition back in... or I could just make double jump never transition to this?
+    // Check out rectangle overlap https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.ArcadePhysics.html#overlapTiles__anchor
+    // https://labs.phaser.io/edit.html?src=src\physics\arcade\get%20bodies%20within%20rectangle.js example lab
   }
 
   update() {

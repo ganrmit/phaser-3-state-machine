@@ -3,7 +3,8 @@
 // have its own counters to control animation etc)
 // Check the bottom of this file for the actual state classes
 
-import Controls from "../util/Controls"
+import Controls from '../util/Controls'
+import StopWatch from '../util/StopWatch'
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   readonly baseRunSpeed = 160
@@ -98,7 +99,7 @@ class RunState extends State {
       return this.transition(SlideState)
     } else if (Phaser.Input.Keyboard.JustDown(this.controls.jump) && this.player.body.touching.down) {
       return this.transition(JumpState)
-    } else if (this.controls.stickX === 0 ) {
+    } else if (this.controls.stickX === 0) {
       return this.transition(IdleState)
     }
   }
@@ -129,6 +130,9 @@ class JumpState extends State {
   }
 
   update() {
+    if (!this.player.anims.isPlaying && this.player.body.velocity.y > 0) {
+      this.player.anims.play('fall')
+    }
     this.lookDirection()
     this.moveX()
     if (Phaser.Input.Keyboard.JustDown(this.controls.jump)) {
@@ -142,10 +146,13 @@ class JumpState extends State {
 }
 
 class DoublejumpState extends State {
+  stopWatch: StopWatch
+
   constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.setVelocityY(-this.player.baseJumpHeight)
     player.anims.play('smrslt')
+    this.stopWatch = new StopWatch()
   }
 
   update() {
@@ -153,8 +160,6 @@ class DoublejumpState extends State {
     this.moveX()
     if (this.player.body.touching.down) {
       return this.transition(IdleState)
-    } else if (this.player.body.touching.left || this.player.body.touching.right) {
-      return this.transition(WallSlideState)
     }
   }
 }
@@ -193,7 +198,6 @@ class WallSlideState extends State {
   constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.anims.play('wall-slide')
-    player.setGravityY(-100)
     // Next time on Dragon Ball Z! I will make a wallside variable up here.
     // Then the player can only double jump away if they press jump AND the opposite direction.
     // Then I'll need a timer or something on the double jump state to make sure it can't transition back in... or I could just make double jump never transition to this?
@@ -201,7 +205,6 @@ class WallSlideState extends State {
 
   update() {
     if (this.player.body.touching.down) {
-      this.player.setGravityY(300)
       return this.transition(IdleState)
     }
   }

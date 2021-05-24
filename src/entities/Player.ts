@@ -3,16 +3,16 @@
 // have its own counters to control animation etc)
 // Check the bottom of this file for the actual state classes
 
-import { Body } from 'matter'
 import Controls from '../util/Controls'
 import StopWatch from '../util/StopWatch'
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   readonly baseRunSpeed = 160
-  readonly baseJumpHeight = 250
+  readonly baseJumpVelocity = 250
 
   controls: Controls
-  pState: State
+  currentState: State
+  lastState: State
 
   static preload(scene: Phaser.Scene) {
     scene.load.atlas('adventurer', 'assets/adventurer/adventurer.png', 'assets/adventurer/adventurer_atlas.json')
@@ -28,17 +28,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.setGravityY(300)
     this.setDepth(100)
     this.controls = new Controls(scene)
-    // Phaser has its own this.state so have to make a dumb name to keep TypeScript happy
-    this.pState = new IdleState(this, this.controls)
+    this.currentState = new IdleState(this, this.controls)
+    this.lastState = this.currentState
 
     // @ts-ignore dev variable
     window.player = this
   }
 
   update(time: number, delta: number) {
-    let newState = this.pState.update()
+    let newState = this.currentState.update()
     if (newState) {
-      this.pState = newState
+      this.lastState = this.currentState
+      this.currentState = newState
     }
   }
 }
@@ -77,8 +78,6 @@ class IdleState extends State {
     this.lookDirection()
     this.moveX()
     if (Phaser.Input.Keyboard.JustDown(this.controls.jump) && this.player.body.touching.down) {
-      // I'm not sure this indirect construction is actually better
-      // but it will allow me to do exit transitions easily... not sure if worth.
       return this.transition(JumpState)
     } else if (this.controls.stickX !== 0) {
       return this.transition(RunState)
@@ -89,9 +88,12 @@ class IdleState extends State {
 }
 
 class RunState extends State {
+  stopWatch: StopWatch
+
   constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.anims.play('run')
+    this.stopWatch = new StopWatch()
   }
 
   update() {
@@ -127,19 +129,19 @@ class CrouchState extends State {
 class JumpState extends State {
   constructor(player: Player, controls: Controls) {
     super(player, controls)
-    player.setVelocityY(-this.player.baseJumpHeight)
+    player.setVelocityY(-this.player.baseJumpVelocity)
     player.anims.play('jump')
   }
 
   update() {
+    this.lookDirection()
+    this.moveX()
     if (!this.player.anims.isPlaying && this.player.body.velocity.y > 0) {
       this.player.anims.play('fall')
     }
     if (Phaser.Input.Keyboard.JustUp(this.controls.jump) && this.player.body.velocity.y < -100) {
       this.player.body.velocity.y = -100
     }
-    this.lookDirection()
-    this.moveX()
     if (Phaser.Input.Keyboard.JustDown(this.controls.jump)) {
       return this.transition(DoublejumpState)
     } else if (this.player.body.touching.down) {
@@ -151,13 +153,10 @@ class JumpState extends State {
 }
 
 class DoublejumpState extends State {
-  stopWatch: StopWatch
-
   constructor(player: Player, controls: Controls) {
     super(player, controls)
-    player.setVelocityY(-this.player.baseJumpHeight)
+    player.setVelocityY(-this.player.baseJumpVelocity)
     player.anims.play('smrslt')
-    this.stopWatch = new StopWatch()
   }
 
   update() {
@@ -165,6 +164,8 @@ class DoublejumpState extends State {
     this.moveX()
     if (this.player.body.touching.down) {
       return this.transition(IdleState)
+    } else if ((this.player.body as Phaser.Physics.Arcade.Body).onWall()) {
+      return this.transition(WallSlideState)
     }
   }
 }
@@ -201,12 +202,12 @@ class StandState extends State {
 }
 
 class WallSlideState extends State {
+  wallLeft: boolean
+
   constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.anims.play('wall-slide')
-    // Next time on Dragon Ball Z! I will make a wallside variable up here.
-    // Then the player can only double jump away if they press jump AND the opposite direction.
-    // Then I'll need a timer or something on the double jump state to make sure it can't transition back in... or I could just make double jump never transition to this?
+    this.wallLeft = this.player.body.touching.left
     // Check out rectangle overlap https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.ArcadePhysics.html#overlapTiles__anchor
     // https://labs.phaser.io/edit.html?src=src\physics\arcade\get%20bodies%20within%20rectangle.js example lab
     // https://github.com/ourcade/phaser3-sword-swing-attack/blob/master/src/scenes/SwordAttackScene.ts
@@ -216,9 +217,27 @@ class WallSlideState extends State {
     if (this.player.body.touching.down) {
       return this.transition(IdleState)
     }
+    if (this.controls.stickX === 0 || (this.wallLeft ? this.controls.stickX < 0 : this.controls.stickX > 0)) {
+      // Bias to hug the wall
+      this.player.setVelocityX(this.wallLeft ? -10 : 10)
+    }
+    if (this.player.body.touching.none) {
+      return this.transition(FallState)
+    }
+  }
+}
 
-    let player = this.player
-    let within = player.scene.physics.overlapRect(player.x - 50, player.y - 50, 100, 100, true, true)
-    // console.log(within)
+class FallState extends State {
+  constructor(player: Player, controls: Controls) {
+    super(player, controls)
+    player.anims.play('fall')
+  }
+
+  update() {
+    this.lookDirection()
+    this.moveX()
+    if (this.player.body.touching.down) {
+      return this.transition(IdleState)
+    }
   }
 }

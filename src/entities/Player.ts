@@ -30,9 +30,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.controls = new Controls(scene)
     this.currentState = new IdleState(this, this.controls)
     this.lastState = this.currentState
-
-    // @ts-ignore dev variable
-    window.player = this
   }
 
   update(time: number, delta: number) {

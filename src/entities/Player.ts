@@ -3,6 +3,7 @@
 // have its own counters to control animation etc)
 // Check the bottom of this file for the actual state classes
 
+import { Body } from 'matter'
 import Controls from '../util/Controls'
 import StopWatch from '../util/StopWatch'
 
@@ -134,13 +135,16 @@ class JumpState extends State {
     if (!this.player.anims.isPlaying && this.player.body.velocity.y > 0) {
       this.player.anims.play('fall')
     }
+    if (Phaser.Input.Keyboard.JustUp(this.controls.jump) && this.player.body.velocity.y < -100) {
+      this.player.body.velocity.y = -100
+    }
     this.lookDirection()
     this.moveX()
     if (Phaser.Input.Keyboard.JustDown(this.controls.jump)) {
       return this.transition(DoublejumpState)
     } else if (this.player.body.touching.down) {
       return this.transition(IdleState)
-    } else if (this.player.body.touching.left || this.player.body.touching.right) {
+    } else if ((this.player.body as Phaser.Physics.Arcade.Body).onWall()) {
       return this.transition(WallSlideState)
     }
   }
@@ -175,6 +179,7 @@ class SlideState extends State {
     this.player.body.velocity.x *= 0.97
     if (Math.abs(this.player.body.velocity.x) < 10) {
       this.player.body.velocity.x = 0
+      this.player.anims.play('thumbs-up')
     }
     if (!this.controls.down.isDown) {
       return this.transition(StandState)
@@ -204,11 +209,16 @@ class WallSlideState extends State {
     // Then I'll need a timer or something on the double jump state to make sure it can't transition back in... or I could just make double jump never transition to this?
     // Check out rectangle overlap https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.ArcadePhysics.html#overlapTiles__anchor
     // https://labs.phaser.io/edit.html?src=src\physics\arcade\get%20bodies%20within%20rectangle.js example lab
+    // https://github.com/ourcade/phaser3-sword-swing-attack/blob/master/src/scenes/SwordAttackScene.ts
   }
 
   update() {
     if (this.player.body.touching.down) {
       return this.transition(IdleState)
     }
+
+    let player = this.player
+    let within = player.scene.physics.overlapRect(player.x - 50, player.y - 50, 100, 100, true, true)
+    // console.log(within)
   }
 }

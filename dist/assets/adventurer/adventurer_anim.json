@@ -187,6 +187,18 @@
           "frame": "adventurer-fall-01"
         }
       ]
+    },
+    {
+      "key": "thumbs-up",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 1,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-thumbs-up-00"
+        }
+      ]
     }
   ]
 }

@@ -15,20 +15,12 @@ export default class StateDemo extends Phaser.Scene {
   }
 
   create() {
+    // Don't collide with roof
+    this.physics.world.setBoundsCollision(true, true, false, true)
+
     this.player = new Player(this, 100, 100)
 
-    let platforms = this.physics.add.staticGroup()
-    platforms.add(this.add.rectangle(150, 200, 300, 20, 0xff0000))
-    platforms.add(this.add.rectangle(0, 100, 20, 200, 0xff0000))
-    platforms.add(this.add.rectangle(300, 100, 20, 200, 0xff0000))
-    this.physics.add.collider(this.player, platforms)
-
-    // TODO: ask Clark about casting
-    this.movingPlatform = this.physics.add.existing(this.add.rectangle(250, 120, 50, 7, 0x00ff00)).body as Phaser.Physics.Arcade.Body
-    this.movingPlatform.setVelocityX(-50)
-    this.movingPlatform.setImmovable(true)
-    this.movingPlatform.allowGravity = false
-    this.physics.add.collider(this.player, this.movingPlatform.gameObject)
+    this.createPlatforms()
   }
 
   update(time: number, delta: number) {
@@ -39,5 +31,19 @@ export default class StateDemo extends Phaser.Scene {
     } else if (this.movingPlatform.x <= 50) {
       this.movingPlatform.setVelocityX(50)
     }
+  }
+
+  createPlatforms() {
+    let platforms = this.physics.add.staticGroup()
+    platforms.add(this.add.rectangle(150, 200, 300, 20, 0xff0000).setData('slideable', true))
+    platforms.add(this.add.rectangle(300, 100, 20, 200, 0xff0000).setData('slideable', true))
+    platforms.add(this.add.rectangle(0, 100, 20, 200, 0xff0000))
+    this.physics.add.collider(this.player, platforms)
+
+    this.movingPlatform = this.physics.add.existing(this.add.rectangle(250, 120, 50, 7, 0x00ff00)).body as Phaser.Physics.Arcade.Body
+    this.movingPlatform.setVelocityX(-50)
+    this.movingPlatform.setImmovable(true)
+    this.movingPlatform.allowGravity = false
+    this.physics.add.collider(this.player, this.movingPlatform.gameObject)
   }
 }

@@ -199,6 +199,98 @@
           "frame": "adventurer-thumbs-up-00"
         }
       ]
+    },
+    {
+      "key": "attack1",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 8,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack1-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack1-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack1-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack1-03"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack1-04"
+        }
+      ]
+    },
+    {
+      "key": "attack2",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 8,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-03"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-04"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-05"
+        }
+      ]
+    },
+    {
+      "key": "attack3",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 8,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-03"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-04"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-05"
+        }
+      ]
     }
   ]
 }

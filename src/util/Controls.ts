@@ -25,4 +25,8 @@ export default class Controls {
   get jump() {
     return this.cursors.up
   }
+
+  get attack() {
+    return this.cursors.space
+  }
 }

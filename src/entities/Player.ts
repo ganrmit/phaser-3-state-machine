@@ -6,6 +6,11 @@
 import Controls from '../util/Controls'
 import StopWatch from '../util/StopWatch'
 
+// Notes for adding actual attacks soon
+// Check out rectangle overlap https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.ArcadePhysics.html#overlapTiles__anchor
+// https://labs.phaser.io/edit.html?src=src\physics\arcade\get%20bodies%20within%20rectangle.js example lab
+// https://github.com/ourcade/phaser3-sword-swing-attack/blob/master/src/scenes/SwordAttackScene.ts
+
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   readonly baseRunSpeed = 160
   readonly baseJumpVelocity = 250
@@ -50,11 +55,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 abstract class State {
   constructor(protected player: Player, protected controls: Controls) {}
 
-  abstract update(): State | void
+  update(): State | void {}
 
-  // TODO: Is this how to make Typescript accept abstract classes as a param?
   transition(klass: new (player: Player, controls: Controls) => State): State {
-    console.log(klass.name)
+    this.exit()
     return new klass(this.player, this.controls)
   }
 
@@ -69,6 +73,8 @@ abstract class State {
   moveX() {
     this.player.setVelocityX(this.player.baseRunSpeed * this.controls.stickX)
   }
+
+  exit() {}
 }
 
 class IdleState extends State {
@@ -87,6 +93,8 @@ class IdleState extends State {
       return this.transition(RunState)
     } else if (this.controls.down.isDown) {
       return this.transition(CrouchState)
+    } else if (this.controls.attack.isDown) {
+      return this.transition(AttackState)
     }
   }
 }
@@ -109,6 +117,8 @@ class RunState extends State {
       return this.transition(FallState)
     } else if (this.controls.stickX === 0) {
       return this.transition(IdleState)
+    } else if (this.controls.attack.isDown) {
+      return this.transition(AttackState)
     }
   }
 }
@@ -187,8 +197,7 @@ class SlideState extends State {
     if (Math.abs(this.player.body.velocity.x) < 10) {
       this.player.body.velocity.x = 0
       this.player.anims.play('thumbs-up')
-    }
-    if (!this.controls.down.isDown && !this.player.body.touching.down) {
+    } else if (!this.controls.down.isDown && !this.player.body.touching.down) {
       return this.transition(FallState)
     } else if (!this.controls.down.isDown) {
       return this.transition(StandState)
@@ -216,22 +225,22 @@ class WallSlideState extends State {
     super(player, controls)
     player.anims.play('wall-slide')
     this.wallLeft = this.player.body.touching.left
-    // Check out rectangle overlap https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.ArcadePhysics.html#overlapTiles__anchor
-    // https://labs.phaser.io/edit.html?src=src\physics\arcade\get%20bodies%20within%20rectangle.js example lab
-    // https://github.com/ourcade/phaser3-sword-swing-attack/blob/master/src/scenes/SwordAttackScene.ts
+    ;(this.player.body as Phaser.Physics.Arcade.Body).setMaxVelocityY(50)
   }
 
   update() {
     if (this.player.body.touching.down) {
       return this.transition(IdleState)
-    }
-    if (this.controls.stickX === 0 || (this.wallLeft ? this.controls.stickX < 0 : this.controls.stickX > 0)) {
+    } else if (this.controls.stickX === 0 || (this.wallLeft ? this.controls.stickX < 0 : this.controls.stickX > 0)) {
       // Bias to hug the wall
       this.player.setVelocityX(this.wallLeft ? -10 : 10)
-    }
-    if (this.player.body.touching.none) {
+    } else if (this.player.body.touching.none) {
       return this.transition(FallState)
     }
+  }
+
+  exit() {
+    (this.player.body as Phaser.Physics.Arcade.Body).setMaxVelocityY(Infinity)
   }
 }
 
@@ -248,6 +257,34 @@ class FallState extends State {
       return this.transition(IdleState)
     } else if (Phaser.Input.Keyboard.JustDown(this.controls.jump) && this.player.canDoubleJump) {
       return this.transition(DoublejumpState)
+    }
+  }
+}
+
+class AttackState extends State {
+  attackLevel = 1
+  idleFrames = 0
+
+  constructor(player: Player, controls: Controls) {
+    super(player, controls)
+    player.anims.play('attack1')
+    this.player.setVelocityX(0)
+  }
+
+  update() {
+    this.lookDirection()
+    if (this.player.anims.isPlaying) {
+      return
+    } else if (this.attackLevel === 3 || ++this.idleFrames > 15) {
+      return this.transition(IdleState)
+    } else if (this.controls.attack.isDown) {
+      this.attackLevel++
+      this.idleFrames = 0
+      if (this.attackLevel === 2) {
+        this.player.anims.play('attack2')
+      } else if (this.attackLevel === 3) {
+        this.player.anims.play('attack3')
+      }
     }
   }
 }

@@ -3,7 +3,6 @@
 // have its own counters to control animation etc)
 // Check the bottom of this file for the actual state classes
 
-import StateDemo from '../scenes/Game'
 import Controls from '../util/Controls'
 import StopWatch from '../util/StopWatch'
 
@@ -14,6 +13,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   controls: Controls
   currentState: State
   lastState: State
+  canDoubleJump = true
 
   static preload(scene: Phaser.Scene) {
     scene.load.atlas('adventurer', 'assets/adventurer/adventurer.png', 'assets/adventurer/adventurer_atlas.json')
@@ -75,6 +75,7 @@ class IdleState extends State {
   constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.anims.play('idle')
+    player.canDoubleJump = true
   }
 
   update() {
@@ -160,6 +161,7 @@ class DoublejumpState extends State {
     super(player, controls)
     player.setVelocityY(-this.player.baseJumpVelocity)
     player.anims.play('smrslt')
+    player.canDoubleJump = false
   }
 
   update() {
@@ -241,6 +243,8 @@ class FallState extends State {
     this.moveX()
     if (this.player.body.touching.down) {
       return this.transition(IdleState)
+    } else if (Phaser.Input.Keyboard.JustDown(this.controls.jump) && this.player.canDoubleJump) {
+      return this.transition(DoublejumpState)
     }
   }
 }

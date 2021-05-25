@@ -92,12 +92,10 @@ class IdleState extends State {
 }
 
 class RunState extends State {
-  stopWatch: StopWatch
-
   constructor(player: Player, controls: Controls) {
     super(player, controls)
     player.anims.play('run')
-    this.stopWatch = new StopWatch()
+    player.canDoubleJump = true
   }
 
   update() {
@@ -107,6 +105,8 @@ class RunState extends State {
       return this.transition(SlideState)
     } else if (Phaser.Input.Keyboard.JustDown(this.controls.jump) && this.player.body.touching.down) {
       return this.transition(JumpState)
+    } else if (!this.player.body.touching.down) {
+      return this.transition(FallState)
     } else if (this.controls.stickX === 0) {
       return this.transition(IdleState)
     }
@@ -141,7 +141,7 @@ class JumpState extends State {
     this.lookDirection()
     this.moveX()
     if (!this.player.anims.isPlaying && this.player.body.velocity.y > 0) {
-      this.player.anims.play('fall')
+      return this.transition(FallState)
     }
     if (Phaser.Input.Keyboard.JustUp(this.controls.jump) && this.player.body.velocity.y < -100) {
       this.player.body.velocity.y = -100
@@ -187,7 +187,9 @@ class SlideState extends State {
       this.player.body.velocity.x = 0
       this.player.anims.play('thumbs-up')
     }
-    if (!this.controls.down.isDown) {
+    if (!this.controls.down.isDown && !this.player.body.touching.down) {
+      return this.transition(FallState)
+    } else if (!this.controls.down.isDown) {
       return this.transition(StandState)
     }
   }

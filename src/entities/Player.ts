@@ -58,6 +58,7 @@ abstract class State {
   update(): State | void {}
 
   transition(klass: new (player: Player, controls: Controls) => State): State {
+    console.log(klass.name)
     this.exit()
     return new klass(this.player, this.controls)
   }
@@ -152,7 +153,7 @@ class JumpState extends State {
     this.moveX()
     if (!this.player.anims.isPlaying && this.player.body.velocity.y > 0) {
       // NOTE: this really should just transition but Falling + Wall slides will take some more effort.
-      this.player.anims.play('falling')
+      this.player.anims.play('fall')
     }
     if (Phaser.Input.Keyboard.JustUp(this.controls.jump) && this.player.body.velocity.y < -100) {
       this.player.body.velocity.y = -100
@@ -197,7 +198,8 @@ class SlideState extends State {
     if (Math.abs(this.player.body.velocity.x) < 10) {
       this.player.body.velocity.x = 0
       this.player.anims.play('thumbs-up')
-    } else if (!this.controls.down.isDown && !this.player.body.touching.down) {
+    } 
+    if (!this.controls.down.isDown && !this.player.body.touching.down) {
       return this.transition(FallState)
     } else if (!this.controls.down.isDown) {
       return this.transition(StandState)

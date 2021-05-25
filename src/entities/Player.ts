@@ -141,7 +141,8 @@ class JumpState extends State {
     this.lookDirection()
     this.moveX()
     if (!this.player.anims.isPlaying && this.player.body.velocity.y > 0) {
-      return this.transition(FallState)
+      // NOTE: this really should just transition but Falling + Wall slides will take some more effort.
+      this.player.anims.play('falling')
     }
     if (Phaser.Input.Keyboard.JustUp(this.controls.jump) && this.player.body.velocity.y < -100) {
       this.player.body.velocity.y = -100

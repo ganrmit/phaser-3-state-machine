@@ -12,6 +12,7 @@ export default class StateDemo extends Phaser.Scene {
 
   preload() {
     Player.preload(this)
+    this.load.atlas('flares', 'assets/flares.png', 'assets/flares.json')
   }
 
   create() {
@@ -21,6 +22,7 @@ export default class StateDemo extends Phaser.Scene {
     this.player = new Player(this, 100, 100)
 
     this.createPlatforms()
+    this.createEffect()
   }
 
   update(time: number, delta: number) {
@@ -45,5 +47,18 @@ export default class StateDemo extends Phaser.Scene {
     this.movingPlatform.setImmovable(true)
     this.movingPlatform.allowGravity = false
     this.physics.add.collider(this.player, this.movingPlatform.gameObject)
+  }
+
+  createEffect() {
+    let particles = this.add.particles('flares')
+    let emitter = particles.createEmitter({
+      frame: ['red', 'blue', 'green', 'yellow'],
+      x: 150,
+      y: 100,
+      speed: 200,
+      lifespan: 3000,
+      blendMode: 'ADD',
+    })
+    particles.setDepth(-1)
   }
 }

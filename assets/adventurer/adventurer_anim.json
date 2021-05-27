@@ -1,0 +1,296 @@
+{
+  "anims": [
+    {
+      "key": "idle",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 4,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-idle-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-idle-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-idle-02"
+        }
+      ]
+    },
+    {
+      "key": "run",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 4,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-03"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-04"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-run-05"
+        }
+      ]
+    },
+    {
+      "key": "crouch",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 4,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-crouch-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-crouch-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-crouch-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-crouch-03"
+        }
+      ]
+    },
+    {
+      "key": "jump",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 12,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-jump-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-jump-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-jump-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-jump-03"
+        }
+      ]
+    },
+    {
+      "key": "smrslt",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 8,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-smrslt-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-smrslt-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-smrslt-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-smrslt-03"
+        }
+      ]
+    },
+    {
+      "key": "slide",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 8,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-slide-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-slide-01"
+        }
+      ]
+    },
+    {
+      "key": "stand",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 12,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-stand-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-stand-01"
+        }
+      ]
+    },
+    {
+      "key": "wall-slide",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 12,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-wall-slide-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-wall-slide-01"
+        }
+      ]
+    },
+    {
+      "key": "fall",
+      "type": "frames",
+      "repeat": -1,
+      "frameRate": 12,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-fall-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-fall-01"
+        }
+      ]
+    },
+    {
+      "key": "thumbs-up",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 1,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-thumbs-up-00"
+        }
+      ]
+    },
+    {
+      "key": "attack1",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 8,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack1-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack1-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack1-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack1-03"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack1-04"
+        }
+      ]
+    },
+    {
+      "key": "attack2",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 8,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-03"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-04"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack2-05"
+        }
+      ]
+    },
+    {
+      "key": "attack3",
+      "type": "frames",
+      "repeat": 0,
+      "frameRate": 8,
+      "frames": [
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-00"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-01"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-02"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-03"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-04"
+        },
+        {
+          "key": "adventurer",
+          "frame": "adventurer-attack3-05"
+        }
+      ]
+    }
+  ]
+}

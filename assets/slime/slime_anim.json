@@ -1,0 +1,28 @@
+{
+    "anims": [
+        {
+            "key": "slime-idle",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 12,
+            "frames": [
+                {
+                    "key": "slime",
+                    "frame": "slime-idle-0"
+                },
+                {
+                    "key": "slime",
+                    "frame": "slime-idle-1"
+                },
+                {
+                    "key": "slime",
+                    "frame": "slime-idle-2"
+                },
+                {
+                    "key": "slime",
+                    "frame": "slime-idle-3"
+                }
+            ]
+        }
+    ]
+}

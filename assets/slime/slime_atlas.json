@@ -1,0 +1,277 @@
+{
+  "frames": [
+    {
+      "filename": "slime-attack-0",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 0,
+        "y": 0
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-attack-1",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 0,
+        "y": 25
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-attack-2",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 32,
+        "y": 0
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-attack-3",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 32,
+        "y": 25
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-attack-4",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 0,
+        "y": 50
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-die-0",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 32,
+        "y": 50
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-die-1",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 64,
+        "y": 0
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-die-2",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 64,
+        "y": 25
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-die-3",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 64,
+        "y": 50
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-hurt-0",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 0,
+        "y": 75
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-hurt-1",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 32,
+        "y": 75
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-hurt-2",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 64,
+        "y": 75
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-hurt-3",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 96,
+        "y": 0
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-idle-0",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 96,
+        "y": 25
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-idle-1",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 96,
+        "y": 50
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-idle-2",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 96,
+        "y": 75
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-idle-3",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 0,
+        "y": 100
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-move-0",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 32,
+        "y": 100
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-move-1",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 64,
+        "y": 100
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-move-2",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 96,
+        "y": 100
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "slime-move-3",
+      "frame": {
+        "w": 32,
+        "h": 25,
+        "x": 0,
+        "y": 125
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ]
+}
